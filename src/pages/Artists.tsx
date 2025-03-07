@@ -6,13 +6,14 @@ import ArtistCard from '@/components/ArtistCard';
 import { Users, ListFilter, Music } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Artist } from '@/types/music';
 
 const Artists = () => {
   const [playerMinimized, setPlayerMinimized] = useState(true);
   const [currentActiveArtist, setCurrentActiveArtist] = useState<string | null>(null);
 
   // Sample data for different artist categories
-  const featuredArtists = [
+  const featuredArtists: Artist[] = [
     {
       id: '1',
       name: 'Lunar Wave',
@@ -28,7 +29,8 @@ const Artists = () => {
       genres: ['Ambient', 'Downtempo'],
       imageUrl: 'https://images.unsplash.com/photo-1629276301820-0f3eedc29fd0?q=80&w=2071&auto=format&fit=crop',
       followers: '850K',
-      albums: 3
+      albums: 3,
+      isVerified: false
     },
     {
       id: '3',
@@ -36,7 +38,8 @@ const Artists = () => {
       genres: ['Progressive', 'House'],
       imageUrl: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2070&auto=format&fit=crop',
       followers: '600K',
-      albums: 4
+      albums: 4,
+      isVerified: false
     },
     {
       id: '4',
@@ -44,7 +47,8 @@ const Artists = () => {
       genres: ['Chillwave', 'Indie'],
       imageUrl: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=2070&auto=format&fit=crop',
       followers: '900K',
-      albums: 6
+      albums: 6,
+      isVerified: false
     },
     {
       id: '5',
@@ -52,18 +56,20 @@ const Artists = () => {
       genres: ['Lo-fi', 'Hip-Hop'],
       imageUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=2070&auto=format&fit=crop',
       followers: '700K',
-      albums: 2
+      albums: 2,
+      isVerified: false
     }
   ];
 
-  const risingStars = [
+  const risingStars: Artist[] = [
     {
       id: '6',
       name: 'Dawn Chorus',
       genres: ['Indie Pop', 'Acoustic'],
       imageUrl: 'https://images.unsplash.com/photo-1487180144351-b8472da7d491?q=80&w=2072&auto=format&fit=crop',
       followers: '300K',
-      albums: 1
+      albums: 1,
+      isVerified: false
     },
     {
       id: '7',
@@ -71,7 +77,8 @@ const Artists = () => {
       genres: ['Techno', 'Minimal'],
       imageUrl: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=2070&auto=format&fit=crop',
       followers: '250K',
-      albums: 2
+      albums: 2,
+      isVerified: false
     },
     {
       id: '8',
@@ -79,7 +86,8 @@ const Artists = () => {
       genres: ['Dream Pop', 'Shoegaze'],
       imageUrl: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?q=80&w=2070&auto=format&fit=crop',
       followers: '400K',
-      albums: 3
+      albums: 3,
+      isVerified: false
     },
     {
       id: '9',
@@ -87,7 +95,8 @@ const Artists = () => {
       genres: ['Deep House', 'Ambient'],
       imageUrl: 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?q=80&w=2070&auto=format&fit=crop',
       followers: '350K',
-      albums: 1
+      albums: 1,
+      isVerified: false
     },
     {
       id: '10',
@@ -95,11 +104,12 @@ const Artists = () => {
       genres: ['Folk', 'Acoustic'],
       imageUrl: 'https://images.unsplash.com/photo-1446057032654-9d8885db76c6?q=80&w=2013&auto=format&fit=crop',
       followers: '280K',
-      albums: 2
+      albums: 2,
+      isVerified: false
     }
   ];
 
-  const establishedIcons = [
+  const establishedIcons: Artist[] = [
     {
       id: '11',
       name: 'Vienna Philharmonic',
@@ -115,7 +125,8 @@ const Artists = () => {
       genres: ['Classical', 'Symphony'],
       imageUrl: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?q=80&w=2070&auto=format&fit=crop',
       followers: '2.2M',
-      albums: 20
+      albums: 20,
+      isVerified: false
     },
     {
       id: '13',
@@ -123,7 +134,8 @@ const Artists = () => {
       genres: ['Classical', 'Concerto'],
       imageUrl: 'https://images.unsplash.com/photo-1514119412350-e174d90d280e?q=80&w=2070&auto=format&fit=crop',
       followers: '2.0M',
-      albums: 18
+      albums: 18,
+      isVerified: false
     },
     {
       id: '14',
@@ -131,7 +143,8 @@ const Artists = () => {
       genres: ['Classical', 'Chamber'],
       imageUrl: 'https://images.unsplash.com/photo-1551731409-43eb3e517a1a?q=80&w=2074&auto=format&fit=crop',
       followers: '1.8M',
-      albums: 15
+      albums: 15,
+      isVerified: false
     },
     {
       id: '15',
@@ -139,18 +152,20 @@ const Artists = () => {
       genres: ['Classical', 'Baroque'],
       imageUrl: 'https://images.unsplash.com/photo-1515523110800-9415d13b84a8?q=80&w=2087&auto=format&fit=crop',
       followers: '1.5M',
-      albums: 12
+      albums: 12,
+      isVerified: false
     }
   ];
 
-  const electronicPioneers = [
+  const electronicPioneers: Artist[] = [
     {
       id: '16',
       name: 'Synthwave Collective',
       genres: ['Synthwave', 'Retrowave'],
       imageUrl: 'https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=1974&auto=format&fit=crop',
       followers: '1.1M',
-      albums: 8
+      albums: 8,
+      isVerified: false
     },
     {
       id: '17',
@@ -158,7 +173,8 @@ const Artists = () => {
       genres: ['Electro', 'Dance'],
       imageUrl: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop',
       followers: '950K',
-      albums: 7
+      albums: 7,
+      isVerified: false
     },
     {
       id: '18',
@@ -166,7 +182,8 @@ const Artists = () => {
       genres: ['Techno', 'IDM'],
       imageUrl: 'https://images.unsplash.com/photo-1550684849-39df3781f7b0?q=80&w=2070&auto=format&fit=crop',
       followers: '800K',
-      albums: 6
+      albums: 6,
+      isVerified: false
     },
     {
       id: '19',
@@ -174,7 +191,8 @@ const Artists = () => {
       genres: ['Trance', 'Progressive'],
       imageUrl: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?q=80&w=2074&auto=format&fit=crop',
       followers: '750K',
-      albums: 5
+      albums: 5,
+      isVerified: false
     },
     {
       id: '20',
@@ -182,7 +200,8 @@ const Artists = () => {
       genres: ['Ambient', 'Electronic'],
       imageUrl: 'https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=1974&auto=format&fit=crop',
       followers: '700K',
-      albums: 4
+      albums: 4,
+      isVerified: false
     }
   ];
 
