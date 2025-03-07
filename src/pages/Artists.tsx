@@ -1,227 +1,193 @@
-
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MusicPlayer from '@/components/MusicPlayer';
 import ArtistCard from '@/components/ArtistCard';
-import { Mic, ListFilter, MusicNote, Disc3 } from 'lucide-react';
+import { Users, ListFilter, Music } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 
 const Artists = () => {
   const [playerMinimized, setPlayerMinimized] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  
-  // Sample artist data categorized
-  const popularArtists = [
+  const [currentActiveArtist, setCurrentActiveArtist] = useState<string | null>(null);
+
+  // Sample data for different artist categories
+  const featuredArtists = [
     {
       id: '1',
-      name: 'Eliza Stellar',
-      genres: ['Pop', 'Electronic'],
-      imageUrl: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=2187&auto=format&fit=crop',
-      followers: 2500000,
-      albums: 4,
+      name: 'Lunar Wave',
+      genres: ['Synthwave', 'Electronic'],
+      imageUrl: 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=2013&auto=format&fit=crop',
+      followers: '1.2M',
+      albums: 5,
       isVerified: true
     },
     {
       id: '2',
-      name: 'Midnight Veil',
-      genres: ['Alternative', 'Rock'],
-      imageUrl: 'https://images.unsplash.com/photo-1516900448138-898720dbe532?q=80&w=2187&auto=format&fit=crop',
-      followers: 1800000,
-      albums: 3,
-      isVerified: true
+      name: 'Ethereal Mind',
+      genres: ['Ambient', 'Downtempo'],
+      imageUrl: 'https://images.unsplash.com/photo-1629276301820-0f3eedc29fd0?q=80&w=2071&auto=format&fit=crop',
+      followers: '850K',
+      albums: 3
     },
     {
       id: '3',
-      name: 'Neon Pulse',
-      genres: ['Electronic', 'Dance'],
-      imageUrl: 'https://images.unsplash.com/photo-1569863829777-147f6c38a1fe?q=80&w=2274&auto=format&fit=crop',
-      followers: 3200000,
-      albums: 5,
-      isVerified: true
+      name: 'Particle Horizon',
+      genres: ['Progressive', 'House'],
+      imageUrl: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2070&auto=format&fit=crop',
+      followers: '600K',
+      albums: 4
     },
     {
       id: '4',
-      name: 'Echo Valley',
-      genres: ['Indie', 'Folk'],
-      imageUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=2187&auto=format&fit=crop',
-      followers: 950000,
-      albums: 2,
-      isVerified: true
+      name: 'Coastal Symphony',
+      genres: ['Chillwave', 'Indie'],
+      imageUrl: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=2070&auto=format&fit=crop',
+      followers: '900K',
+      albums: 6
     },
     {
       id: '5',
-      name: 'Quantum Beats',
-      genres: ['Hip Hop', 'R&B'],
-      imageUrl: 'https://images.unsplash.com/photo-1616724229634-2fba467ee0be?q=80&w=2274&auto=format&fit=crop',
-      followers: 2100000,
-      albums: 6,
-      isVerified: true
+      name: 'City Lights',
+      genres: ['Lo-fi', 'Hip-Hop'],
+      imageUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=2070&auto=format&fit=crop',
+      followers: '700K',
+      albums: 2
     }
   ];
 
-  const newArtists = [
+  const risingStars = [
     {
       id: '6',
-      name: 'Aurora Lights',
-      genres: ['Pop', 'Synth'],
-      imageUrl: 'https://images.unsplash.com/photo-1550928431-ee0ec6db30d3?q=80&w=2274&auto=format&fit=crop',
-      followers: 520000,
-      albums: 1,
-      isVerified: false
+      name: 'Dawn Chorus',
+      genres: ['Indie Pop', 'Acoustic'],
+      imageUrl: 'https://images.unsplash.com/photo-1487180144351-b8472da7d491?q=80&w=2072&auto=format&fit=crop',
+      followers: '300K',
+      albums: 1
     },
     {
       id: '7',
-      name: 'Crystal Harmony',
-      genres: ['New Age', 'Ambient'],
-      imageUrl: 'https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?q=80&w=2289&auto=format&fit=crop',
-      followers: 380000,
-      albums: 2,
-      isVerified: false
+      name: 'Digital Pulse',
+      genres: ['Techno', 'Minimal'],
+      imageUrl: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=2070&auto=format&fit=crop',
+      followers: '250K',
+      albums: 2
     },
     {
       id: '8',
-      name: 'Urban Whisper',
-      genres: ['Hip Hop', 'Soul'],
-      imageUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=2662&auto=format&fit=crop',
-      followers: 710000,
-      albums: 1,
-      isVerified: true
+      name: 'Stellar Winds',
+      genres: ['Dream Pop', 'Shoegaze'],
+      imageUrl: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?q=80&w=2070&auto=format&fit=crop',
+      followers: '400K',
+      albums: 3
     },
     {
       id: '9',
-      name: 'Sapphire Waves',
-      genres: ['Pop', 'R&B'],
-      imageUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2160&auto=format&fit=crop',
-      followers: 450000,
-      albums: 1,
-      isVerified: false
+      name: 'Aquatic Resonance',
+      genres: ['Deep House', 'Ambient'],
+      imageUrl: 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?q=80&w=2070&auto=format&fit=crop',
+      followers: '350K',
+      albums: 1
     },
     {
       id: '10',
-      name: 'Emerald Echo',
-      genres: ['Alternative', 'Indie'],
-      imageUrl: 'https://images.unsplash.com/photo-1558898479-33c0057a5d12?q=80&w=2274&auto=format&fit=crop',
-      followers: 290000,
-      albums: 1,
-      isVerified: false
+      name: 'Alpine Waves',
+      genres: ['Folk', 'Acoustic'],
+      imageUrl: 'https://images.unsplash.com/photo-1446057032654-9d8885db76c6?q=80&w=2013&auto=format&fit=crop',
+      followers: '280K',
+      albums: 2
     }
   ];
 
-  const rockArtists = [
+  const establishedIcons = [
     {
       id: '11',
-      name: 'Thunder Road',
-      genres: ['Rock', 'Alternative'],
-      imageUrl: 'https://images.unsplash.com/photo-1485561222141-e16a8dfba0d4?q=80&w=2274&auto=format&fit=crop',
-      followers: 1200000,
-      albums: 5,
+      name: 'Vienna Philharmonic',
+      genres: ['Classical', 'Orchestral'],
+      imageUrl: 'https://images.unsplash.com/photo-1507924538820-ede94a04019d?q=80&w=2070&auto=format&fit=crop',
+      followers: '2.5M',
+      albums: 25,
       isVerified: true
     },
     {
       id: '12',
-      name: 'Crimson Steel',
-      genres: ['Metal', 'Hard Rock'],
-      imageUrl: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=2270&auto=format&fit=crop',
-      followers: 980000,
-      albums: 4,
-      isVerified: true
+      name: 'Royal Concertgebouw',
+      genres: ['Classical', 'Symphony'],
+      imageUrl: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?q=80&w=2070&auto=format&fit=crop',
+      followers: '2.2M',
+      albums: 20
     },
     {
       id: '13',
-      name: 'Velvet Riff',
-      genres: ['Classic Rock', 'Blues Rock'],
-      imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2187&auto=format&fit=crop',
-      followers: 1450000,
-      albums: 7,
-      isVerified: true
+      name: 'London Philharmonic',
+      genres: ['Classical', 'Concerto'],
+      imageUrl: 'https://images.unsplash.com/photo-1514119412350-e174d90d280e?q=80&w=2070&auto=format&fit=crop',
+      followers: '2.0M',
+      albums: 18
     },
     {
       id: '14',
-      name: 'Sonic Wave',
-      genres: ['Rock', 'Punk'],
-      imageUrl: 'https://images.unsplash.com/photo-1567186937675-a5131c8a89ea?q=80&w=2274&auto=format&fit=crop',
-      followers: 870000,
-      albums: 3,
-      isVerified: true
+      name: 'Berlin Chamber',
+      genres: ['Classical', 'Chamber'],
+      imageUrl: 'https://images.unsplash.com/photo-1551731409-43eb3e517a1a?q=80&w=2074&auto=format&fit=crop',
+      followers: '1.8M',
+      albums: 15
     },
     {
       id: '15',
-      name: 'Eclipse Anthem',
-      genres: ['Progressive Rock', 'Art Rock'],
-      imageUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=2274&auto=format&fit=crop',
-      followers: 750000,
-      albums: 2,
-      isVerified: false
+      name: 'Academy of St. Martin',
+      genres: ['Classical', 'Baroque'],
+      imageUrl: 'https://images.unsplash.com/photo-1515523110800-9415d13b84a8?q=80&w=2087&auto=format&fit=crop',
+      followers: '1.5M',
+      albums: 12
     }
   ];
 
-  const electronicArtists = [
+  const electronicPioneers = [
     {
       id: '16',
-      name: 'Digital Horizon',
-      genres: ['EDM', 'House'],
-      imageUrl: 'https://images.unsplash.com/photo-1642975576449-842ca2dda642?q=80&w=2187&auto=format&fit=crop',
-      followers: 2800000,
-      albums: 6,
-      isVerified: true
+      name: 'Synthwave Collective',
+      genres: ['Synthwave', 'Retrowave'],
+      imageUrl: 'https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=1974&auto=format&fit=crop',
+      followers: '1.1M',
+      albums: 8
     },
     {
       id: '17',
-      name: 'Pixel Storm',
-      genres: ['Techno', 'Electronica'],
-      imageUrl: 'https://images.unsplash.com/photo-1459356067573-0a9285135a10?q=80&w=2187&auto=format&fit=crop',
-      followers: 1650000,
-      albums: 4,
-      isVerified: true
+      name: 'Electro Pulse',
+      genres: ['Electro', 'Dance'],
+      imageUrl: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop',
+      followers: '950K',
+      albums: 7
     },
     {
       id: '18',
-      name: 'Neon Circuit',
-      genres: ['Synth-pop', 'Electro'],
-      imageUrl: 'https://images.unsplash.com/photo-1548375495-fcd5cf972a63?q=80&w=2232&auto=format&fit=crop',
-      followers: 1420000,
-      albums: 3,
-      isVerified: true
+      name: 'Binary Beats',
+      genres: ['Techno', 'IDM'],
+      imageUrl: 'https://images.unsplash.com/photo-1550684849-39df3781f7b0?q=80&w=2070&auto=format&fit=crop',
+      followers: '800K',
+      albums: 6
     },
     {
       id: '19',
-      name: 'Quantum Beat',
-      genres: ['Dubstep', 'Trap'],
-      imageUrl: 'https://images.unsplash.com/photo-1515077678510-ce3bdf418862?q=80&w=2235&auto=format&fit=crop',
-      followers: 1950000,
-      albums: 5,
-      isVerified: true
+      name: 'Digital Horizon',
+      genres: ['Trance', 'Progressive'],
+      imageUrl: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?q=80&w=2074&auto=format&fit=crop',
+      followers: '750K',
+      albums: 5
     },
     {
       id: '20',
-      name: 'Cyber Dreams',
-      genres: ['Chillwave', 'Ambient'],
-      imageUrl: 'https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5?q=80&w=2153&auto=format&fit=crop',
-      followers: 890000,
-      albums: 2,
-      isVerified: false
+      name: 'Neural Network',
+      genres: ['Ambient', 'Electronic'],
+      imageUrl: 'https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=1974&auto=format&fit=crop',
+      followers: '700K',
+      albums: 4
     }
   ];
 
   const togglePlayer = () => {
     setPlayerMinimized(!playerMinimized);
-  };
-  
-  const formatNumber = (num: number) => {
-    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-    return num.toString();
-  };
-
-  const filterArtists = (artists: any[]) => {
-    if (!searchQuery) return artists;
-    return artists.filter(artist => 
-      artist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      artist.genres.some((genre: string) => genre.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
   };
 
   return (
@@ -234,203 +200,129 @@ const Artists = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
             <div className="flex items-center space-x-3">
               <div className="bg-primary/10 rounded-full p-2">
-                <Mic className="h-6 w-6 text-primary" />
+                <Users className="h-6 w-6 text-primary" />
               </div>
               <h1 className="h2">Artists</h1>
             </div>
             
-            <div className="flex flex-col sm:flex-row mt-4 md:mt-0 space-y-2 sm:space-y-0 sm:space-x-2 w-full md:w-auto">
-              <div className="relative w-full md:w-64">
-                <Input
-                  placeholder="Search artists or genres..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-              
-              <Button variant="outline" size="sm" className="flex items-center whitespace-nowrap">
+            <div className="flex mt-4 md:mt-0 space-x-2">
+              <Button variant="outline" size="sm" className="flex items-center">
                 <ListFilter className="h-4 w-4 mr-2" />
                 Filter
+              </Button>
+              
+              <Button variant="outline" size="sm" className="flex items-center">
+                {currentActiveArtist ? (
+                  <>
+                    {/* Replace MusicNote with Music */}
+                    <Music className="h-4 w-4 mr-2" />
+                    Pause All
+                  </>
+                ) : (
+                  <>
+                    {/* Replace MusicNote with Music */}
+                    <Music className="h-4 w-4 mr-2" />
+                    Play All
+                  </>
+                )}
               </Button>
             </div>
           </div>
           
           {/* Artist Categories Tabs */}
-          <Tabs defaultValue="all" className="w-full mb-10">
+          <Tabs defaultValue="featured" className="w-full mb-10">
             <TabsList className="grid grid-cols-5 w-full md:w-auto">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="popular">Popular</TabsTrigger>
-              <TabsTrigger value="new">New</TabsTrigger>
-              <TabsTrigger value="rock">Rock</TabsTrigger>
-              <TabsTrigger value="electronic">Electronic</TabsTrigger>
+              <TabsTrigger value="featured">Featured</TabsTrigger>
+              <TabsTrigger value="rising">Rising Stars</TabsTrigger>
+              <TabsTrigger value="icons">Established Icons</TabsTrigger>
+              <TabsTrigger value="pioneers">Electronic Pioneers</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="all" className="animate-fade-in">
-              <div className="space-y-12">
-                <div>
-                  <h2 className="text-2xl font-display font-semibold mb-6 flex items-center">
-                    <MusicNote className="h-5 w-5 mr-2 text-primary" /> 
-                    Popular Artists
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                    {filterArtists(popularArtists).map((artist, index) => (
-                      <div 
-                        key={artist.id} 
-                        className="animate-fade-in" 
-                        style={{ animationDelay: `${index * 0.05}s` }}
-                      >
-                        <ArtistCard
-                          id={artist.id}
-                          name={artist.name}
-                          genres={artist.genres}
-                          imageUrl={artist.imageUrl}
-                          followers={formatNumber(artist.followers)}
-                          albums={artist.albums}
-                          isVerified={artist.isVerified}
-                        />
-                      </div>
-                    ))}
+            <TabsContent value="featured" className="animate-fade-in">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                {featuredArtists.map((artist, index) => (
+                  <div 
+                    key={artist.id} 
+                    className="animate-fade-in" 
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <ArtistCard
+                      id={artist.id}
+                      name={artist.name}
+                      genres={artist.genres}
+                      imageUrl={artist.imageUrl}
+                      followers={artist.followers}
+                      albums={artist.albums}
+                      isVerified={artist.isVerified}
+                    />
                   </div>
-                </div>
-                
-                <div>
-                  <h2 className="text-2xl font-display font-semibold mb-6 flex items-center">
-                    <Disc3 className="h-5 w-5 mr-2 text-primary" /> 
-                    New Artists
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                    {filterArtists(newArtists).map((artist, index) => (
-                      <div 
-                        key={artist.id} 
-                        className="animate-fade-in" 
-                        style={{ animationDelay: `${index * 0.05}s` }}
-                      >
-                        <ArtistCard
-                          id={artist.id}
-                          name={artist.name}
-                          genres={artist.genres}
-                          imageUrl={artist.imageUrl}
-                          followers={formatNumber(artist.followers)}
-                          albums={artist.albums}
-                          isVerified={artist.isVerified}
-                        />
-                      </div>
-                    ))}
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="rising" className="animate-fade-in">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                {risingStars.map((artist, index) => (
+                  <div 
+                    key={artist.id} 
+                    className="animate-fade-in" 
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <ArtistCard
+                      id={artist.id}
+                      name={artist.name}
+                      genres={artist.genres}
+                      imageUrl={artist.imageUrl}
+                      followers={artist.followers}
+                      albums={artist.albums}
+                      isVerified={artist.isVerified}
+                    />
                   </div>
-                </div>
+                ))}
               </div>
             </TabsContent>
             
-            <TabsContent value="popular" className="animate-fade-in">
-              <div>
-                <h2 className="text-2xl font-display font-semibold mb-6 flex items-center">
-                  <MusicNote className="h-5 w-5 mr-2 text-primary" /> 
-                  Popular Artists
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                  {filterArtists(popularArtists).map((artist, index) => (
-                    <div 
-                      key={artist.id} 
-                      className="animate-fade-in" 
-                      style={{ animationDelay: `${index * 0.05}s` }}
-                    >
-                      <ArtistCard
-                        id={artist.id}
-                        name={artist.name}
-                        genres={artist.genres}
-                        imageUrl={artist.imageUrl}
-                        followers={formatNumber(artist.followers)}
-                        albums={artist.albums}
-                        isVerified={artist.isVerified}
-                      />
-                    </div>
-                  ))}
-                </div>
+            <TabsContent value="icons" className="animate-fade-in">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                {establishedIcons.map((artist, index) => (
+                  <div 
+                    key={artist.id} 
+                    className="animate-fade-in" 
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <ArtistCard
+                      id={artist.id}
+                      name={artist.name}
+                      genres={artist.genres}
+                      imageUrl={artist.imageUrl}
+                      followers={artist.followers}
+                      albums={artist.albums}
+                      isVerified={artist.isVerified}
+                    />
+                  </div>
+                ))}
               </div>
             </TabsContent>
             
-            <TabsContent value="new" className="animate-fade-in">
-              <div>
-                <h2 className="text-2xl font-display font-semibold mb-6 flex items-center">
-                  <Disc3 className="h-5 w-5 mr-2 text-primary" /> 
-                  New Artists
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                  {filterArtists(newArtists).map((artist, index) => (
-                    <div 
-                      key={artist.id} 
-                      className="animate-fade-in" 
-                      style={{ animationDelay: `${index * 0.05}s` }}
-                    >
-                      <ArtistCard
-                        id={artist.id}
-                        name={artist.name}
-                        genres={artist.genres}
-                        imageUrl={artist.imageUrl}
-                        followers={formatNumber(artist.followers)}
-                        albums={artist.albums}
-                        isVerified={artist.isVerified}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="rock" className="animate-fade-in">
-              <div>
-                <h2 className="text-2xl font-display font-semibold mb-6 flex items-center">
-                  <MusicNote className="h-5 w-5 mr-2 text-primary" /> 
-                  Rock Artists
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                  {filterArtists(rockArtists).map((artist, index) => (
-                    <div 
-                      key={artist.id} 
-                      className="animate-fade-in" 
-                      style={{ animationDelay: `${index * 0.05}s` }}
-                    >
-                      <ArtistCard
-                        id={artist.id}
-                        name={artist.name}
-                        genres={artist.genres}
-                        imageUrl={artist.imageUrl}
-                        followers={formatNumber(artist.followers)}
-                        albums={artist.albums}
-                        isVerified={artist.isVerified}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="electronic" className="animate-fade-in">
-              <div>
-                <h2 className="text-2xl font-display font-semibold mb-6 flex items-center">
-                  <MusicNote className="h-5 w-5 mr-2 text-primary" /> 
-                  Electronic Artists
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                  {filterArtists(electronicArtists).map((artist, index) => (
-                    <div 
-                      key={artist.id} 
-                      className="animate-fade-in" 
-                      style={{ animationDelay: `${index * 0.05}s` }}
-                    >
-                      <ArtistCard
-                        id={artist.id}
-                        name={artist.name}
-                        genres={artist.genres}
-                        imageUrl={artist.imageUrl}
-                        followers={formatNumber(artist.followers)}
-                        albums={artist.albums}
-                        isVerified={artist.isVerified}
-                      />
-                    </div>
-                  ))}
-                </div>
+            <TabsContent value="pioneers" className="animate-fade-in">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                {electronicPioneers.map((artist, index) => (
+                  <div 
+                    key={artist.id} 
+                    className="animate-fade-in" 
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <ArtistCard
+                      id={artist.id}
+                      name={artist.name}
+                      genres={artist.genres}
+                      imageUrl={artist.imageUrl}
+                      followers={artist.followers}
+                      albums={artist.albums}
+                      isVerified={artist.isVerified}
+                    />
+                  </div>
+                ))}
               </div>
             </TabsContent>
           </Tabs>

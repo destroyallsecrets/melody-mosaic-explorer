@@ -1,19 +1,19 @@
-
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MusicPlayer from '@/components/MusicPlayer';
-import FeaturedSection from '@/components/FeaturedSection';
-import { Disc3, ListFilter, Play, Pause } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Disc3 } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AlbumTabsContent from '@/components/albums/AlbumTabsContent';
+import AlbumFilters from '@/components/albums/AlbumFilters';
+import { Album } from '@/types/music';
 
 const Albums = () => {
   const [playerMinimized, setPlayerMinimized] = useState(true);
   const [currentActiveAlbum, setCurrentActiveAlbum] = useState<string | null>(null);
   
   // Sample data for different album categories
-  const featuredAlbums = [
+  const featuredAlbums: Album[] = [
     {
       id: '1',
       title: 'Midnight Echoes',
@@ -51,7 +51,7 @@ const Albums = () => {
     }
   ];
 
-  const newReleases = [
+  const newReleases: Album[] = [
     {
       id: '6',
       title: 'Eternal Sunrise',
@@ -89,7 +89,7 @@ const Albums = () => {
     }
   ];
 
-  const classicalAlbums = [
+  const classicalAlbums: Album[] = [
     {
       id: '11',
       title: 'Nocturnal Sonata',
@@ -127,7 +127,7 @@ const Albums = () => {
     }
   ];
 
-  const electronicAlbums = [
+  const electronicAlbums: Album[] = [
     {
       id: '16',
       title: 'Digital Waves',
@@ -169,6 +169,14 @@ const Albums = () => {
     setPlayerMinimized(!playerMinimized);
   };
 
+  const togglePlayAll = () => {
+    if (currentActiveAlbum) {
+      setCurrentActiveAlbum(null);
+    } else {
+      setCurrentActiveAlbum('playing-all');
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -184,26 +192,10 @@ const Albums = () => {
               <h1 className="h2">Albums</h1>
             </div>
             
-            <div className="flex mt-4 md:mt-0 space-x-2">
-              <Button variant="outline" size="sm" className="flex items-center">
-                <ListFilter className="h-4 w-4 mr-2" />
-                Filter
-              </Button>
-              
-              <Button variant="outline" size="sm" className="flex items-center">
-                {currentActiveAlbum ? (
-                  <>
-                    <Pause className="h-4 w-4 mr-2" />
-                    Pause All
-                  </>
-                ) : (
-                  <>
-                    <Play className="h-4 w-4 mr-2" />
-                    Play All
-                  </>
-                )}
-              </Button>
-            </div>
+            <AlbumFilters 
+              currentActiveAlbum={currentActiveAlbum} 
+              onTogglePlayAll={togglePlayAll}
+            />
           </div>
           
           {/* Album Categories Tabs */}
@@ -216,63 +208,12 @@ const Albums = () => {
               <TabsTrigger value="electronic">Electronic</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="all" className="animate-fade-in">
-              <FeaturedSection
-                title="Featured Albums"
-                albums={featuredAlbums}
-                viewAllLink="/albums?category=featured"
-              />
-              
-              <FeaturedSection
-                title="New Releases"
-                albums={newReleases}
-                viewAllLink="/albums?category=new"
-              />
-              
-              <FeaturedSection
-                title="Classical Collection"
-                albums={classicalAlbums}
-                viewAllLink="/albums?category=classical"
-              />
-              
-              <FeaturedSection
-                title="Electronic Beats"
-                albums={electronicAlbums}
-                viewAllLink="/albums?category=electronic"
-              />
-            </TabsContent>
-            
-            <TabsContent value="featured" className="animate-fade-in">
-              <FeaturedSection
-                title="Featured Albums"
-                subtitle="Our editorial picks of exceptional music across all genres."
-                albums={featuredAlbums}
-              />
-            </TabsContent>
-            
-            <TabsContent value="new" className="animate-fade-in">
-              <FeaturedSection
-                title="New Releases"
-                subtitle="Fresh sounds from your favorite artists and exciting newcomers."
-                albums={newReleases}
-              />
-            </TabsContent>
-            
-            <TabsContent value="classical" className="animate-fade-in">
-              <FeaturedSection
-                title="Classical Collection"
-                subtitle="Timeless masterpieces from the greatest composers and orchestras."
-                albums={classicalAlbums}
-              />
-            </TabsContent>
-            
-            <TabsContent value="electronic" className="animate-fade-in">
-              <FeaturedSection
-                title="Electronic Beats"
-                subtitle="Cutting-edge electronic music from producers pushing boundaries."
-                albums={electronicAlbums}
-              />
-            </TabsContent>
+            <AlbumTabsContent 
+              featuredAlbums={featuredAlbums}
+              newReleases={newReleases}
+              classicalAlbums={classicalAlbums}
+              electronicAlbums={electronicAlbums}
+            />
           </Tabs>
         </div>
       </main>
