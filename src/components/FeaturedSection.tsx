@@ -3,6 +3,7 @@ import React from 'react';
 import AlbumCard from './AlbumCard';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
 interface FeaturedSectionProps {
   title: string;
@@ -15,19 +16,21 @@ interface FeaturedSectionProps {
     releaseYear?: number;
   }>;
   viewAllLink?: string;
+  className?: string;
 }
 
 const FeaturedSection = ({
   title,
   subtitle,
   albums,
-  viewAllLink
+  viewAllLink,
+  className
 }: FeaturedSectionProps) => {
   return (
-    <section className="py-16">
+    <section className={cn("py-12", className)}>
       <div className="container px-6 mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
           <div className="space-y-2">
             <span className="inline-block text-xs font-medium uppercase tracking-wider text-primary">
               Collection
