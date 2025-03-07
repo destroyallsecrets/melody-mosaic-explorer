@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MusicPlayer from '@/components/MusicPlayer';
-import ArtistCard from '@/components/ArtistCard';
-import { Users, ListFilter, Music } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ArtistsHeader from '@/components/artists/ArtistsHeader';
+import ArtistsTabs from '@/components/artists/ArtistsTabs';
 import { Artist } from '@/types/music';
 
 const Artists = () => {
@@ -216,135 +214,15 @@ const Artists = () => {
       <main className="flex-grow pt-28 pb-20">
         <div className="container px-6 mx-auto">
           {/* Page Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
-            <div className="flex items-center space-x-3">
-              <div className="bg-primary/10 rounded-full p-2">
-                <Users className="h-6 w-6 text-primary" />
-              </div>
-              <h1 className="h2">Artists</h1>
-            </div>
-            
-            <div className="flex mt-4 md:mt-0 space-x-2">
-              <Button variant="outline" size="sm" className="flex items-center">
-                <ListFilter className="h-4 w-4 mr-2" />
-                Filter
-              </Button>
-              
-              <Button variant="outline" size="sm" className="flex items-center">
-                {currentActiveArtist ? (
-                  <>
-                    {/* Replace MusicNote with Music */}
-                    <Music className="h-4 w-4 mr-2" />
-                    Pause All
-                  </>
-                ) : (
-                  <>
-                    {/* Replace MusicNote with Music */}
-                    <Music className="h-4 w-4 mr-2" />
-                    Play All
-                  </>
-                )}
-              </Button>
-            </div>
-          </div>
+          <ArtistsHeader currentActiveArtist={currentActiveArtist} />
           
           {/* Artist Categories Tabs */}
-          <Tabs defaultValue="featured" className="w-full mb-10">
-            <TabsList className="grid grid-cols-5 w-full md:w-auto">
-              <TabsTrigger value="featured">Featured</TabsTrigger>
-              <TabsTrigger value="rising">Rising Stars</TabsTrigger>
-              <TabsTrigger value="icons">Established Icons</TabsTrigger>
-              <TabsTrigger value="pioneers">Electronic Pioneers</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="featured" className="animate-fade-in">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-                {featuredArtists.map((artist, index) => (
-                  <div 
-                    key={artist.id} 
-                    className="animate-fade-in" 
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                  >
-                    <ArtistCard
-                      id={artist.id}
-                      name={artist.name}
-                      genres={artist.genres}
-                      imageUrl={artist.imageUrl}
-                      followers={artist.followers}
-                      albums={artist.albums}
-                      isVerified={artist.isVerified}
-                    />
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="rising" className="animate-fade-in">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-                {risingStars.map((artist, index) => (
-                  <div 
-                    key={artist.id} 
-                    className="animate-fade-in" 
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                  >
-                    <ArtistCard
-                      id={artist.id}
-                      name={artist.name}
-                      genres={artist.genres}
-                      imageUrl={artist.imageUrl}
-                      followers={artist.followers}
-                      albums={artist.albums}
-                      isVerified={artist.isVerified}
-                    />
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="icons" className="animate-fade-in">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-                {establishedIcons.map((artist, index) => (
-                  <div 
-                    key={artist.id} 
-                    className="animate-fade-in" 
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                  >
-                    <ArtistCard
-                      id={artist.id}
-                      name={artist.name}
-                      genres={artist.genres}
-                      imageUrl={artist.imageUrl}
-                      followers={artist.followers}
-                      albums={artist.albums}
-                      isVerified={artist.isVerified}
-                    />
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="pioneers" className="animate-fade-in">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-                {electronicPioneers.map((artist, index) => (
-                  <div 
-                    key={artist.id} 
-                    className="animate-fade-in" 
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                  >
-                    <ArtistCard
-                      id={artist.id}
-                      name={artist.name}
-                      genres={artist.genres}
-                      imageUrl={artist.imageUrl}
-                      followers={artist.followers}
-                      albums={artist.albums}
-                      isVerified={artist.isVerified}
-                    />
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
+          <ArtistsTabs 
+            featuredArtists={featuredArtists}
+            risingStars={risingStars}
+            establishedIcons={establishedIcons}
+            electronicPioneers={electronicPioneers}
+          />
         </div>
       </main>
       
